@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const cors = require('cors'); // Import CORS
 const scraper = require('./scraper/scraper'); // Import the scraper
 const cron = require('node-cron'); // Import cron for periodic tasks
 const chatbotRoutes = require('./routes/chatbotRoutes'); // Import routes
@@ -9,6 +10,16 @@ dotenv.config(); // Load environment variables
 
 const app = express();
 const port = 5000;
+
+// Enable CORS for frontend (both deployed & local)
+app.use(cors({
+  origin: [
+    'https://chat-bot-frontend-mauve.vercel.app', // Deployed frontend
+    'http://localhost:3000' // Local frontend
+  ],
+  methods: 'GET,POST',
+  credentials: true, // Allow credentials like cookies
+}));
 
 // Middleware to parse incoming JSON requests
 app.use(express.json());
